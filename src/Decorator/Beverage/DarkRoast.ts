@@ -1,9 +1,11 @@
 import Beverage from "./Beverage";
 
-class DarkRoast implements Beverage{
-    getDescription(): string {
-        return 'Dark Roast Coffee';
-    };
+class DarkRoast extends Beverage{
+
+    constructor(){
+        super();
+        this.description = 'Dark Roast';
+    }
 
     cost(): number{
         return 1.99;

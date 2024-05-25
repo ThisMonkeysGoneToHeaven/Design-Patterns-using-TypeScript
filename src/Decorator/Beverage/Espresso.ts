@@ -1,10 +1,11 @@
 import Beverage from './Beverage';
 
-class Espresso implements Beverage{
+class Espresso extends Beverage{
 
-    getDescription(): string{
-        return 'Espresso';
-    };
+    constructor(){
+        super();
+        this.description = 'Espresso';
+    }
 
     cost(): number{
         return 1.49;

@@ -3,7 +3,7 @@ import CondimentDecorator from "./CondimentDecorator";
 
 class Mocha extends CondimentDecorator{
     
-    beverage!: Beverage;
+    beverage: Beverage;
 
     constructor(beverage: Beverage){
         super();

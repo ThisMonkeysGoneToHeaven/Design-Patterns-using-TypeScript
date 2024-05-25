@@ -1,4 +1,10 @@
-export default interface Beverage{
-    getDescription(): string,
-    cost(): number,    
+export default abstract class Beverage{
+
+    description: string = 'Unknown Beverage';
+
+    getDescription(): string{
+        return this.description;
+    }
+
+    abstract cost(): number
 }
