@@ -13,17 +13,21 @@ const TIMEOUT = 30; // in seconds
 app.get("/mockAPI/:userId", (req, res) => {
   const userId = req.params.userId;
 
+  // if the data is in cache
   if (userId in cache) {
     const userData = cache[userId];
+    // if the data is not expired
     if (userData.expiryTime > Date.now()) {
       console.log("sending out cached data!");
       return res.send(userData.data);
     } else delete cache[userId];
   }
 
+  // fetch new data
   fetch(mockAPIURL)
     .then((response) => response.json())
     .then((data) => {
+      // cache the newly fetched data
       cache[userId] = {
         data: data,
         expiryTime: Date.now() + TIMEOUT * 1000,
