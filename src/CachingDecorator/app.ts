@@ -1,35 +1,27 @@
 import express from 'express'
+import InMemoryCache from './InMemoryCache';
 
 // app config
 const app = express();
 const PORT = 3000;
 
-// Defining Interfaces for Cache & CacheEntry
-interface CacheEntry{
-    expiryTime: number,
-    data: Array<{}>
-}
-interface Cache{
-    [key: string]: CacheEntry
-}
-
 // mockAPI config
 const mockAPIURL = `https://665f0f6a1e9017dc16f2a4e8.mockapi.io/api/v1/data`;
-const cache: Cache = {};
 const TIMEOUT = 30; // in seconds
+
+const cache = new InMemoryCache(TIMEOUT);
 
 // exposing the /mockAPI endpoint
 app.get("/mockAPI/:userId", (req, res) => {
   const userId = req.params.userId;
 
   // if the data is in cache
-  if (userId in cache) {
-    const userData = cache[userId];
+  if (cache.contains(userId)) {
     // if the data is not expired
-    if (userData.expiryTime > Date.now()) {
+    if (!cache.isExpired(userId)) {
       console.log("sending out cached data!");
-      return res.send(userData.data);
-    } else delete cache[userId];
+      return res.send(cache.getData(userId));
+    } else cache.delete(userId);
   }
 
   // fetch new data
@@ -37,13 +29,9 @@ app.get("/mockAPI/:userId", (req, res) => {
     .then((response) => response.json())
     .then((data) => {
       // cache the newly fetched data
-      cache[userId] = {
-        data: data,
-        expiryTime: Date.now() + TIMEOUT * 1000,
-      };
-
+      cache.add(userId, data);
       console.log("sending out newly fetched data!");
-      res.send(cache[userId].data);
+      res.send(data);
     });
 });
 
