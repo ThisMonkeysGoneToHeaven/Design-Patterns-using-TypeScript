@@ -1,21 +1,23 @@
+import MyCache from "./MyCache";
+
 // Defining Interfaces for Cache & CacheEntry
-interface CacheEntry{
+interface MyInMemoryCacheEntry{
     expiryTime: number,
     data: JSON
 }
 
-interface MyCache{
-    [key: string]: CacheEntry
+interface MyInMemoryCache{
+    [key: string]: MyInMemoryCacheEntry
 }
 
-class InMemoryCache{
-    constructor(cache_refresh_rate_in_seconds: number){
+class InMemoryCache extends MyCache{
+
+    constructor(refresh_rate: number){
+        super(refresh_rate);
         this.cache = {};
-        this.refresh_rate = cache_refresh_rate_in_seconds;
     }
     
-    cache: MyCache;
-    refresh_rate: number;
+    cache: MyInMemoryCache;
 
     contains(userId: string){
         if(userId in this.cache)
@@ -42,7 +44,6 @@ class InMemoryCache{
         delete this.cache[userId];
         return true;
     }
-
 }
 
 export default InMemoryCache;
