@@ -1,5 +1,6 @@
 import express from 'express'
 import InMemoryCache from './InMemoryCache';
+import MyCache from './MyCache';
 
 // app config
 const app = express();
@@ -9,7 +10,7 @@ const PORT = 3000;
 const mockAPIURL = `https://665f0f6a1e9017dc16f2a4e8.mockapi.io/api/v1/data`;
 const TIMEOUT = 30; // in seconds
 
-const cache = new InMemoryCache(TIMEOUT);
+const cache: MyCache = new InMemoryCache(TIMEOUT);
 
 // exposing the /mockAPI endpoint
 app.get("/mockAPI/:userId", (req, res) => {
